@@ -5,6 +5,9 @@ import Template from "../Template";
 import Profile from "../pages/Profile";
 import CategoryProducts from "../pages/CategoryProducts";
 import Login from "../pages/Login";
+import Cart from "../pages/Cart";
+import { auth } from "../middleware/auth";
+import { authLogin } from "../middleware/auth";
 
 // variabel yang menyimpan daftar routing di export biar bisa dipake di fike lain
 export const router = createBrowserRouter([
@@ -30,10 +33,30 @@ export const router = createBrowserRouter([
                 path: "/products/category/:categoryId",
                 element: <CategoryProducts/>
             },
+            
+        ]
+    },
+    {
+        path: "/",
+        element: <Template/>,
+        // memanggul middleware sebelum menjalankan path didalam sini
+        loader: auth,
+        children: [
             {
-                path: "/login",
-                element: <Login/>
+                path: "/cart",
+                element: <Cart/>
             }
         ]
     },
+    {
+    path: "/",
+    element: <Template />,
+    loader: authLogin,
+    children: [
+        {
+            path: "/login",
+            element: <Login />
+        }
+    ]
+    }
 ])

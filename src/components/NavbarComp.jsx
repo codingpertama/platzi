@@ -1,5 +1,6 @@
 import {
     Avatar,
+    Button,
     Dropdown,
     DropdownDivider,
     DropdownHeader,
@@ -12,9 +13,19 @@ import {
 } from "flowbite-react";
 import imgLogo from "../assets/store2.png";
 import { FcPaid } from "react-icons/fc";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import { AuthContext } from "../contexts/AuthContext";
 
 export default function NavbarComp() {
+    const {isLogin, logout} = useContext(AuthContext)
+    const navigate = useNavigate()
+
+    // handler event click button logout
+    function handleClickLogout() {
+        logout();
+        navigate("/login")
+    }
     return (
         <Navbar fluid rounded>
             <NavbarBrand href="/">
@@ -22,7 +33,7 @@ export default function NavbarComp() {
                 <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">Platzi Fake Store</span>
             </NavbarBrand>
             <div className="flex md:order-2">
-                <Link to="/login">
+                <Link to="/cart">
                 <FcPaid className="me-2 text-4xl mt-1"/>
                 </Link>
                 <Dropdown
@@ -44,6 +55,11 @@ export default function NavbarComp() {
                     <DropdownDivider />
                     <DropdownItem>Sign out</DropdownItem>
                 </Dropdown>
+                {
+                    isLogin != null && (
+                        <Button color="red" className="ms-2" onClick={handleClickLogout}>Logout</Button>
+                    )
+                }
                 <NavbarToggle />
             </div>
         </Navbar>

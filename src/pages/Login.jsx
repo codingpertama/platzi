@@ -1,7 +1,9 @@
 import { Button, Checkbox, Label, TextInput } from "flowbite-react";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Toast, ToastToggle } from "flowbite-react";
 import { HiCheck, HiExclamation, HiX } from "react-icons/hi";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../contexts/AuthContext";
 
 export default function Login() {
     const [formValue, setFormValue] = useState({
@@ -16,6 +18,41 @@ export default function Login() {
             setError("Gagal! Pastikan email dan password terisi.");
         } else {
             setError("");
+            // lanjutkan ke fetch api
+            authLogin()
+        }
+    }
+
+    // const untuk perpindahan halaman
+    const navigate = useNavigate();
+    // panggil context
+    const { checkLogin } = useContext(AuthContext)
+
+    async function authLogin() {
+        const url = "https://api.escuelajs.co/api/v1/auth/login";
+        try {
+            const response = await fetch(url, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify( formValue ),
+            });
+            if (!response.ok) {
+                throw new Error(`Response status: ${response.status}`);
+            }
+
+            const result = await response.json();
+            // console.log(result);
+            // simpan token jwt ke local storage
+            localStorage.setItem("access_token", result.access_token);
+            localStorage.setItem("refresh_token", result.refresh_token);
+            // ubah nilai is login jadi true yang ada di context
+            checkLogin();
+            // pindahkan halaman
+            navigate("/cart");
+        } catch (error) {
+            setError("Gagal! Pastikan email dan password benar, coba lagi.")
         }
     }
 
@@ -24,13 +61,13 @@ export default function Login() {
             {
                 error != "" && (
                     <div className="flex justify-end pe-25 w-full">
-                    <Toast className="bg-red-100 font-bold">
-                        <div className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-red-100 text-red-500 dark:bg-red-800 dark:text-red-200">
-                            <HiX className="h-5 w-5" />
-                        </div>
-                        <div className="ml-3 text-sm font-normal">{error}</div>
-                        <ToastToggle />
-                    </Toast>
+                        <Toast className="bg-red-100 font-bold">
+                            <div className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-red-100 text-red-500 dark:bg-red-800 dark:text-red-200">
+                                <HiX className="h-5 w-5" />
+                            </div>
+                            <div className="ml-3 text-sm font-normal">{error}</div>
+                            <ToastToggle />
+                        </Toast>
                     </div>
                 )
             }
