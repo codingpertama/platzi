@@ -16,10 +16,13 @@ import { FcPaid } from "react-icons/fc";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../contexts/AuthContext";
+import { Badge } from "flowbite-react";
+import { CartContext } from "../contexts/CartContext";
 
 export default function NavbarComp() {
     const {isLogin, logout} = useContext(AuthContext)
     const navigate = useNavigate()
+    const {cart} = useContext(CartContext)
 
     // handler event click button logout
     function handleClickLogout() {
@@ -33,9 +36,12 @@ export default function NavbarComp() {
                 <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">Platzi Fake Store</span>
             </NavbarBrand>
             <div className="flex md:order-2">
-                <Link to="/cart">
-                <FcPaid className="me-2 text-4xl mt-1"/>
-                </Link>
+                <div className="relative">
+                    <Badge color="failure" className="rounded-full absolute top-0 left-0">{cart.length}</Badge>
+                    <Link to="/cart">
+                    <FcPaid className="me-2 text-4xl mt-1"/>
+                    </Link>
+                </div>
                 <Dropdown
                     arrowIcon={false}
                     inline
