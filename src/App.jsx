@@ -1,11 +1,13 @@
 import NavbarComp from "./components/NavbarComp"
 import BannerComp from "./components/BannerComp"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useContext } from "react"
 import CardComp from "./components/CardComp"
 import CardList from "./components/CardList"
 import { Button } from "flowbite-react"
 import { Link } from "react-router-dom"
 import { Spinner } from "flowbite-react"
+import { CartContext } from "./contexts/CartContext"
+import ModalSuccessComp from "./components/ModalSuccessComp"
 
 export default function App() {
   const [categoryProducts, setCategoryProducts] = useState([])
@@ -13,6 +15,8 @@ export default function App() {
   const [products, setProducts] = useState([])
 
   const [loading, setLoading] = useState(true);
+
+  const { checkoutSuccess, setCheckoutSuccess} = useContext(CartContext)
 
   async function getDataCategories() {
     const url = "https://api.escuelajs.co/api/v1/categories";
@@ -80,6 +84,11 @@ export default function App() {
           </div>
         </CardList>
       </div>
+
+      <ModalSuccessComp
+    openModal={checkoutSuccess}
+    handleCloseModal={() => setCheckoutSuccess(false)}
+    />
     </>
   )
 }

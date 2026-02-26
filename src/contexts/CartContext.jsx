@@ -4,6 +4,7 @@ export const CartContext = createContext()
 
 export default function CartProvider({children}) {
     const [cart, setCart] = useState([])
+    const [checkoutSuccess, setCheckoutSuccess] = useState(false)
 
     function updateCart(item, qty) {
         // cek jika di cart sudah ada produk tsb jangan ditambahkan tapi update qty nya aja
@@ -62,7 +63,7 @@ export default function CartProvider({children}) {
     }
 
     return (
-        <CartContext.Provider value={{cart, updateCart, updateQtyProduct, deleteProduct, deleteAll}}>
+        <CartContext.Provider value={{cart, updateCart, updateQtyProduct, deleteProduct, deleteAll, checkoutSuccess, setCheckoutSuccess}}>
             {children}
         </CartContext.Provider>
     )

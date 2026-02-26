@@ -2,6 +2,7 @@ import { Button, ButtonGroup, Card } from "flowbite-react";
 import { useContext } from "react";
 import { CartContext } from "../contexts/CartContext";
 import { FaTrash } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 export default function Cart() {
     const { cart, updateQtyProduct, deleteProduct, deleteAll } = useContext(CartContext)
@@ -46,6 +47,9 @@ export default function Cart() {
                     }
 
                 </ul>
+                {
+                    cart.length == 0 ? "" : <Link to={"/checkout"} className="mt-5 flex justify-end"><Button color="green">Checkout</Button></Link>
+                }
             </div>
         </Card>
     )

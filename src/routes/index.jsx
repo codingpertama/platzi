@@ -8,6 +8,7 @@ import Login from "../pages/Login";
 import Cart from "../pages/Cart";
 import { auth } from "../middleware/auth";
 import { authLogin } from "../middleware/auth";
+import Checkout from "../pages/Checkout"
 
 // variabel yang menyimpan daftar routing di export biar bisa dipake di fike lain
 export const router = createBrowserRouter([
@@ -45,6 +46,10 @@ export const router = createBrowserRouter([
             {
                 path: "/cart",
                 element: <Cart/>
+            },
+            {
+                path: "/checkout",
+                element: <Checkout/>
             }
         ]
     },
